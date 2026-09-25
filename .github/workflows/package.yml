@@ -3,6 +3,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version number (e.g. 3) - creates release v<number>"
+        required: false
+        default: ""
 permissions:
   contents: write
 jobs:
@@ -27,3 +32,9 @@ jobs:
         run: |
           gh release delete site -y --cleanup-tag || true
           gh release create site raghad-nouh-site.zip --title "Raghad Nouh site (full)" --notes "Full site folder in one zip." --latest
+          V="${{ github.event.inputs.version }}"
+          if [ -n "$V" ]; then
+            cp raghad-nouh-site.zip "raghad-nouh-site-v$V.zip"
+            gh release delete "v$V" -y --cleanup-tag || true
+            gh release create "v$V" "raghad-nouh-site-v$V.zip" --title "Raghad Nouh site - v$V" --notes "Full site (all images, videos, PDFs) - version $V." --latest=false
+          fi

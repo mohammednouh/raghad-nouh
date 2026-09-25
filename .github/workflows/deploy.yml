@@ -21,6 +21,12 @@ jobs:
       - run: |
           mkdir _site && cat site.tar.part* | tar -xf - -C _site && touch _site/.nojekyll
           if [ -f index.html ]; then cp index.html _site/index.html; fi
+          if [ -f update.tar ]; then tar -xf update.tar -C _site; fi
+          mkdir -p _site/assets/lib
+          curl -fsSL -o _site/assets/lib/pdf.min.js https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js || true
+          curl -fsSL -o _site/assets/lib/pdf.worker.min.js https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js || true
+          curl -fsSL -o _site/assets/lib/hls.min.js https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js || true
+          ls -la _site/assets/lib
           sed -i 's#content="og.png"#content="https://raghadnouh.github.io/og.png"#' _site/index.html
           sed -i 's#<meta property="og:type"#<meta property="og:url" content="https://raghadnouh.github.io/"/>\n<meta property="og:type"#' _site/index.html
           pip install -q --break-system-packages pillow

@@ -14,6 +14,12 @@ jobs:
           mkdir raghad-nouh-site
           cat site.tar.part* | tar -xf - -C raghad-nouh-site
           if [ -f index.html ]; then cp index.html raghad-nouh-site/index.html; fi
+          if [ -f update.tar ]; then tar -xf update.tar -C raghad-nouh-site; fi
+          mkdir -p raghad-nouh-site/assets/lib
+          curl -fsSL -o raghad-nouh-site/assets/lib/pdf.min.js https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js || true
+          curl -fsSL -o raghad-nouh-site/assets/lib/pdf.worker.min.js https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js || true
+          curl -fsSL -o raghad-nouh-site/assets/lib/hls.min.js https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js || true
+          ls -la raghad-nouh-site/assets/lib
           zip -q -r -0 raghad-nouh-site.zip raghad-nouh-site
           ls -lh raghad-nouh-site.zip
       - env:

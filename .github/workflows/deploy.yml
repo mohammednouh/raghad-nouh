@@ -20,6 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           mkdir _site && cat site.tar.part* | tar -xf - -C _site && touch _site/.nojekyll
+          if [ -f index.html ]; then cp index.html _site/index.html; fi
           sed -i 's#content="og.png"#content="https://raghadnouh.github.io/og.png"#' _site/index.html
           sed -i 's#<meta property="og:type"#<meta property="og:url" content="https://raghadnouh.github.io/"/>\n<meta property="og:type"#' _site/index.html
           pip install -q --break-system-packages pillow

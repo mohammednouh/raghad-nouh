@@ -22,6 +22,10 @@ jobs:
           mkdir _site && cat site.tar.part* | tar -xf - -C _site && touch _site/.nojekyll
           sed -i 's#content="og.png"#content="https://raghadnouh.github.io/og.png"#' _site/index.html
           sed -i 's#<meta property="og:type"#<meta property="og:url" content="https://raghadnouh.github.io/"/>\n<meta property="og:type"#' _site/index.html
+          pip install -q --break-system-packages pillow
+          python3 -c "from PIL import Image; Image.open('_site/og.png').convert('RGB').save('_site/og.jpg', quality=85, optimize=True, progressive=True)"
+          sed -i 's#raghadnouh.github.io/og.png#raghadnouh.github.io/og.jpg#g; s#content="og.png"#content="https://raghadnouh.github.io/og.jpg"#g' _site/index.html
+          ls -lh _site/og.jpg
           grep -o 'og:[a-z]*" content="[^"]*' _site/index.html
       - uses: actions/upload-pages-artifact@v3
         with:

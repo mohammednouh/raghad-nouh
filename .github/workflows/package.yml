@@ -1,0 +1,22 @@
+name: package
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir raghad-nouh-site
+          cat site.tar.part* | tar -xf - -C raghad-nouh-site
+          zip -q -r -0 raghad-nouh-site.zip raghad-nouh-site
+          ls -lh raghad-nouh-site.zip
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete site -y --cleanup-tag || true
+          gh release create site raghad-nouh-site.zip --title "Raghad Nouh site (full)" --notes "Full site folder in one zip." --latest

@@ -20,6 +20,11 @@ jobs:
           cat site.tar.part* | tar -xf - -C raghad-nouh-site
           if [ -f index.html ]; then cp index.html raghad-nouh-site/index.html; fi
           if [ -f update.tar ]; then tar -xf update.tar -C raghad-nouh-site; fi
+          # V6 overlay: new page, cleaned paintings, teasers, CV, logos, protection tools
+          if ls v6.tar.part* >/dev/null 2>&1; then cat v6.tar.part* | tar -xf - -C raghad-nouh-site; fi
+          # V6 rights protection: bake the RN watermark into every work image/page and rebuild PDFs (CV excluded)
+          pip install -q --break-system-packages pillow
+          if [ -f raghad-nouh-site/tools/protect.py ]; then python3 raghad-nouh-site/tools/protect.py raghad-nouh-site && rm -rf raghad-nouh-site/tools; fi
           mkdir -p raghad-nouh-site/assets/lib
           curl -fsSL -o raghad-nouh-site/assets/lib/pdf.min.js https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js || true
           curl -fsSL -o raghad-nouh-site/assets/lib/pdf.worker.min.js https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js || true

@@ -22,6 +22,11 @@ jobs:
           mkdir _site && cat site.tar.part* | tar -xf - -C _site && touch _site/.nojekyll
           if [ -f index.html ]; then cp index.html _site/index.html; fi
           if [ -f update.tar ]; then tar -xf update.tar -C _site; fi
+          # V6 overlay: new page, cleaned paintings, teasers, CV, logos, protection tools
+          if ls v6.tar.part* >/dev/null 2>&1; then cat v6.tar.part* | tar -xf - -C _site; fi
+          # V6 rights protection: bake the RN watermark into every work image/page and rebuild PDFs (CV excluded)
+          pip install -q --break-system-packages pillow
+          if [ -f _site/tools/protect.py ]; then python3 _site/tools/protect.py _site && rm -rf _site/tools; fi
           mkdir -p _site/assets/lib
           curl -fsSL -o _site/assets/lib/pdf.min.js https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js || true
           curl -fsSL -o _site/assets/lib/pdf.worker.min.js https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js || true
